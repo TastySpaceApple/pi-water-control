@@ -73,7 +73,7 @@ const gpio = {
 function setupRpio(){
   rpio.init();
   for(port in gpio){
-    rpio.open(gpio[port], rpio.OUTPUT);
+    rpio.open(gpio[port], rpio.OUTPUT, rpio.LOW);
   }
 }
 
