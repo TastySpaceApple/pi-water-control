@@ -122,7 +122,8 @@ function parse(str){
   if(str.includes(',') || str.includes(':')){ // list
     return str.split(/[\:\,]/).map(parse)
   } else {
-    return parseInt(str) || str;
+    let parsed =  parseInt(str);
+    return parsed == NaN ? str : parsed;
   }
 }
 

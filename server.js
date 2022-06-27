@@ -2,6 +2,8 @@ const express = require('express');
 const app = express();
 const bodyParser = require("body-parser");
 const fs = require('fs')
+const rpio = require('rpio');
+
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(bodyParser.json());
@@ -58,15 +60,24 @@ async function runCommands(commands){
 }
 
 const gpio = {
-  'C': 2,
-  'AC1': 3,
-  'AC2': 4,
-  'M': 14,
-  4: 15,
-  3: 18,
-  2: 23,
-  1: 24
+  'C': 3,
+  'AC1': 5,
+  'AC2': 7,
+  'M': 8,
+  4: 10,
+  3: 12,
+  2: 16,
+  1: 18
 }
+
+function setupRpio(){
+  rpio.init({mock: 'raspi-zero-w'});
+  for(port in gpio){
+    rpio.open(gpio[port], rpio.OUTPUT);
+  }
+}
+
+setupRpio();
 
 async function runCommand(commandType, parameters){
   switch(commandType){
@@ -74,7 +85,7 @@ async function runCommand(commandType, parameters){
       const port = parameters[0];
       const [hours, minutes] = parameters[1];
       openPort(port)
-      await waitTime(hours * 3600 * 1000 + minutes * 60 * 1000 / 100)
+      await waitTime(hours * 3600 * 1000 + minutes * 60 * 1000)
       closePort(port)
       break;
   }
@@ -83,15 +94,19 @@ async function runCommand(commandType, parameters){
 function openPort(port){
   if(port instanceof Array)
     return port.map(openPort)
-  else
+  else {
     console.log('Opening GPIO', gpio[port])
+    rpio.write(gpio[port], rpio.HIGH);
+  }
 }
 
 function closePort(port){
   if(port instanceof Array)
     return port.map(openPort)
-  else
+  else {
     console.log('Closing GPIO', gpio[port])
+    rpio.write(gpio[port], rpio.LOW);
+  }
 }
 
 clock();
