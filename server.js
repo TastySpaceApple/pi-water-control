@@ -60,18 +60,18 @@ async function runCommands(commands){
 }
 
 const gpio = {
-  'C': 3,
-  'AC1': 5,
-  'AC2': 7,
-  'M': 8,
-  4: 10,
-  3: 12,
-  2: 16,
-  1: 18
+  'C': 2,
+  'AC1': 3,
+  'AC2': 4,
+  'M': 14,
+  4: 15,
+  3: 18,
+  2: 23,
+  1: 24
 }
 
 function setupRpio(){
-  rpio.init({mock: 'raspi-zero-w'});
+  rpio.init({mock: 'raspi-zero-w', mapping: 'gpio'});
   for(port in gpio){
     rpio.open(gpio[port], rpio.OUTPUT);
   }
@@ -85,7 +85,7 @@ async function runCommand(commandType, parameters){
       const port = parameters[0];
       const [hours, minutes] = parameters[1];
       openPort(port)
-      await waitTime(hours * 3600 * 1000 + minutes * 60 * 1000)
+      await waitTime(hours * 3600 * 1000 + minutes * 60 * 1000 / 100)
       closePort(port)
       break;
   }
