@@ -60,18 +60,18 @@ async function runCommands(commands){
 }
 
 const gpio = {
-  'C': 2,
-  'AC1': 3,
-  'AC2': 4,
-  'M': 14,
-  4: 15,
-  3: 18,
-  2: 23,
-  1: 24
+  'C': 3,
+  'AC1': 5,
+  'AC2': 7,
+  'M': 8,
+  4: 10,
+  3: 12,
+  2: 16,
+  1: 18
 }
 
 function setupRpio(){
-  rpio.init({mock: 'raspi-zero-w', mapping: 'gpio'});
+  rpio.init();
   for(port in gpio){
     rpio.open(gpio[port], rpio.OUTPUT);
   }
