@@ -87,7 +87,7 @@ async function runCommand(commandType, parameters){
       const port = parameters[0];
       const [hours, minutes] = parameters[1];
       portOn(port)
-      await waitTime(hours * 3600 * 1000 + minutes * 60 * 1000 / 100)
+      await waitTime(hours * 3600 * 1000 + minutes * 60 * 1000)
       portOff(port)
       break;
   }
