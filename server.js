@@ -70,10 +70,12 @@ const gpio = {
   1: 18
 }
 
+const ON = rpio.LOW, OFF = rpio.HIGH;
+
 function setupRpio(){
   rpio.init();
   for(port in gpio){
-    rpio.open(gpio[port], rpio.OUTPUT, rpio.LOW);
+    rpio.open(gpio[port], rpio.OUTPUT, OFF);
   }
 }
 
@@ -84,28 +86,28 @@ async function runCommand(commandType, parameters){
     case 'open':
       const port = parameters[0];
       const [hours, minutes] = parameters[1];
-      openPort(port)
+      portOn(port)
       await waitTime(hours * 3600 * 1000 + minutes * 60 * 1000 / 100)
-      closePort(port)
+      portOff(port)
       break;
   }
 }
 
-function openPort(port){
+function portOn(port){
   if(port instanceof Array)
-    return port.map(openPort)
+    return port.map(portOn)
   else {
     console.log('Opening GPIO', gpio[port])
-    rpio.write(gpio[port], rpio.HIGH);
+    rpio.write(gpio[port], ON);
   }
 }
 
-function closePort(port){
+function portOff(port){
   if(port instanceof Array)
-    return port.map(openPort)
+    return port.map(portOff)
   else {
     console.log('Closing GPIO', gpio[port])
-    rpio.write(gpio[port], rpio.LOW);
+    rpio.write(gpio[port], OFF);
   }
 }
 
