@@ -11,14 +11,14 @@ app.use(bodyParser.json());
 let program = require('./program.json');
 
 app.post('/save', (req, res) => {
-  writeFile("code.txt", req.body.code);
-  writeFile("program.json", JSON.stringify(req.body.compiled));
+  writeFile(__dirname  + "/code.txt", req.body.code);
+  writeFile(__dirname  + "/program.json", JSON.stringify(req.body.compiled));
   program = req.body.compiled;
   res.json({success:true})
 })
 
 app.get('/load', (req, res) => {
-  const data = fs.readFileSync('./code.txt')
+  const data = fs.readFileSync(__dirname  + '/code.txt')
   res.send(data);
 })
 
@@ -30,7 +30,7 @@ const writeFile = (filename, content) => {
   }
 }
 
-app.use('/', express.static('static'))
+app.use('/', express.static(__dirname + '/static'))
 
 app.listen(process.env.PORT || 5000);
 
