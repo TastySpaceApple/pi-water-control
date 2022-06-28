@@ -113,3 +113,8 @@ function portOff(port){
 
 clock();
 setInterval(clock, 1 * 1000 * 60);
+
+// always open ports
+portOn('C')
+portOn('AC1')
+portOn('AC2')
